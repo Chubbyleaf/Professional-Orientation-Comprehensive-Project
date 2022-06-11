@@ -1,0 +1,88 @@
+spring:
+  application:
+    name: cloud-provider-user
+
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource  #当前数据源操作类型
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://212.129.245.11:3306/zyzh?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: zyzh
+    password: zyzh2022.
+    druid:
+      validation-query: select '1' from dual
+
+  freemarker:
+    suffix: .html
+    cache: false
+
+  servlet:
+      multipart:
+        max-file-size: 20MB
+        max-request-size: 20MB
+
+  mail:
+    #smtp服务主机  qq邮箱则为smtp.qq.com
+    host: smtp.qq.com
+    #服务协议
+    protocol: smtp
+    # 编码集
+    default-encoding: UTF-8
+#    port: 465
+    #发送邮件的账户
+    username: 3175593191@qq.com
+    #授权码
+    password: mpovbhjmugrwdfaj
+    test-connection: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+
+
+server:
+  port: 9001
+
+eureka:
+  client:
+    #此客户端是否获取eureka服务器注册表上的注册信息，默认为true
+    fetch-registry: true
+    #实例是否在eureka服务器上注册自己的信息以供其他服务发现，默认为true,即自己注册自己。
+    register-with-eureka: true
+    service-url:
+      #defaultZone 这个是不会提示的，此处需要自己写
+      #实际上属性应该是service-url,这个属性是个map（key-value）格式；当key是defaultZone的时候才能被解析；所以这里没有提示，
+      #但是自己还需要写一个defaultZone；
+      defaultZone: http://localhost:9000/eureka
+  #服务注册中心实例的主机名
+  instance:
+    hostname: 127.0.0.1
+    prefer-ip-address: true
+    instance-id: 127.0.0.1:9001
+
+feign:
+  circuitbreaker: #开启熔断机制
+    enabled: true
+  hystrix:
+    enabled: true
+
+
+#mybatis:配置
+mybatis-plus:
+  #mapper-Locations: classpath:mapper/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true #驼峰转下划线
+
+qiniu:
+  accessKey: 9cR-UFX_XVwNvMgekR5koFdr-WSc4Af1tk13esM6
+  accessSecretKey: cYU7t3E6WZIKb6xrERNVMyRaOMxg7uJWxN18s5wV
+  bucket: zyzh2022-2
+  imageUrl: https://portal.qiniu.com/cdn/domain/rbz8c5rhq.hd-bkt.clouddn.com
+
+
+
+
+

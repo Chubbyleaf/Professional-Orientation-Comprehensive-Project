@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.cloudprovidermusic.dao.CollectionDao">
+
+    <resultMap type="com.example.cloudprovidermusic.entity.Collection" id="CollectionMap">
+        <result property="collectionId" column="collection_id" jdbcType="INTEGER"/>
+        <result property="collectionName" column="collection_name" jdbcType="VARCHAR"/>
+        <result property="identity" column="identity" jdbcType="INTEGER"/>
+        <result property="colOwnerId" column="col_owner_id" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="collectionId" useGeneratedKeys="true">
+        insert into zyzh.collection(collection_name, identity, col_owner_id, create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.collectionName}, #{entity.identity}, #{entity.colOwnerId}, #{entity.createTime})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="collectionId" useGeneratedKeys="true">
+        insert into zyzh.collection(collection_name, identity, col_owner_id, create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.collectionName}, #{entity.identity}, #{entity.colOwnerId}, #{entity.createTime})
+        </foreach>
+        on duplicate key update
+         collection_name = values(collection_name) , identity = values(identity) , col_owner_id = values(col_owner_id) , create_time = values(create_time)     </insert>
+
+</mapper>
+

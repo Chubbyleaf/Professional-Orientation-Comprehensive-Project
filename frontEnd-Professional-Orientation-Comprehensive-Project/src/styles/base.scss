@@ -1,0 +1,16 @@
+$font-size-huge:20px;
+$white:black;
+.swiper {
+    height: 200px;
+    width: 100%;
+  
+    .swiper-slide {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-weight: bold;
+      font-size: $font-size-huge * 2;
+      background-color: $white;
+    }
+  }

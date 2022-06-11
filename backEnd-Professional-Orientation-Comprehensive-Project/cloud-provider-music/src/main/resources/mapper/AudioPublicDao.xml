@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.cloudprovidermusic.dao.AudioPublicDao">
+
+    <resultMap type="com.example.cloudprovidermusic.entity.AudioPublic" id="AudioPublicMap">
+        <result property="audioId" column="audio_id" jdbcType="INTEGER"/>
+        <result property="audioName" column="audio_name" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="comment" column="comment" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="des" column="des" jdbcType="VARCHAR"/>
+        <result property="audioUrl" column="audio_url" jdbcType="VARCHAR"/>
+        <result property="imgUrl" column="img_url" jdbcType="VARCHAR"/>
+        <result property="identity" column="identity" jdbcType="INTEGER"/>
+        <result property="apubAuthorId" column="apub_author_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="audioId" useGeneratedKeys="true">
+        insert into zyzh.audio_public(audio_name, status, comment, create_time, des, audio_url, img_url, identity, apub_author_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.audioName}, #{entity.status}, #{entity.comment}, #{entity.createTime}, #{entity.des}, #{entity.audioUrl}, #{entity.imgUrl}, #{entity.identity}, #{entity.apubAuthorId})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="audioId" useGeneratedKeys="true">
+        insert into zyzh.audio_public(audio_name, status, comment, create_time, des, audio_url, img_url, identity, apub_author_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.audioName}, #{entity.status}, #{entity.comment}, #{entity.createTime}, #{entity.des}, #{entity.audioUrl}, #{entity.imgUrl}, #{entity.identity}, #{entity.apubAuthorId})
+        </foreach>
+        on duplicate key update
+         audio_name = values(audio_name) , status = values(status) , comment = values(comment) , create_time = values(create_time) , des = values(des) , audio_url = values(audio_url) , img_url = values(img_url) , identity = values(identity) , apub_author_id = values(apub_author_id)     </insert>
+
+</mapper>
+

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.cloudprovidermusic.dao.AudioTagDao">
+
+    <resultMap type="com.example.cloudprovidermusic.entity.AudioTag" id="AudioTagMap">
+        <result property="atTagId" column="at_tag_id" jdbcType="INTEGER"/>
+        <result property="atAudioPublicId" column="at_audio_public_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="" useGeneratedKeys="true">
+        insert into zyzh.audio_tag(at_tag_id, at_audio_public_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.atTagId}, #{entity.atAudioPublicId})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="" useGeneratedKeys="true">
+        insert into zyzh.audio_tag(at_tag_id, at_audio_public_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.atTagId}, #{entity.atAudioPublicId})
+        </foreach>
+        on duplicate key update
+         at_tag_id = values(at_tag_id) , at_audio_public_id = values(at_audio_public_id)     </insert>
+
+</mapper>
+

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.cloudprovidermusic.dao.UserDao">
+
+    <resultMap type="com.example.cloudprovidermusic.entity.User" id="UserMap">
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="identity" column="identity" jdbcType="INTEGER"/>
+        <result property="avatarUrl" column="avatar_url" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into zyzh.user(user_name, password, email, identity, avatar_url, address, create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.userName}, #{entity.password}, #{entity.email}, #{entity.identity}, #{entity.avatarUrl}, #{entity.address}, #{entity.createTime})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into zyzh.user(user_name, password, email, identity, avatar_url, address, create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userName}, #{entity.password}, #{entity.email}, #{entity.identity}, #{entity.avatarUrl}, #{entity.address}, #{entity.createTime})
+        </foreach>
+        on duplicate key update
+         user_name = values(user_name) , password = values(password) , email = values(email) , identity = values(identity) , avatar_url = values(avatar_url) , address = values(address) , create_time = values(create_time)     </insert>
+
+</mapper>
+

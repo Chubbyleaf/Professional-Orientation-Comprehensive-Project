@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style type="text/css">
+        body{
+            margin: 0px;
+        }
+        .zhezhao{
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            background: #000;
+            width: 100%;
+            height: 100%;
+            opacity: 0.5;
+        }
+        .tankuang{
+            position: relative;
+            background: #fff;
+            width: 50%;
+            height: 80%;
+            border-radius: 5px;
+            margin: 5% auto;
+        }
+        #header{
+            height: 40px;
+        }
+        #header-right{
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 5px;
+            background: #0b308e;
+            color: #fff;
+            right: 5px;
+            top: 5px;
+            text-align: center;
+        }
+        div>input{
+            display: none;
+        }
+        div>label{
+            position: relative;
+            margin-right: 34px;
+        }
+        div>label::before{
+            display: inline-block;
+            content: "";
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1px solid rgb(219, 219, 219);
+            margin-right: 6px;
+            vertical-align: bottom;
+        }
+        div>input:checked+label::before{
+            background-color: rgb(56, 129, 239);
+        }
+        div>input:checked+label::after{
+            display: inline-block;
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            position: absolute;
+            left: 6px;
+            bottom: 6px;
+            background-color: white;
+        }
+        #bgm_list{
+            background:#fafdfe;
+            height:28px;
+            width:180px;
+            line-height:28px;
+            border:1px solid #07497d;
+            -moz-border-radius:2px;
+            -webkit-border-radius:2px;
+            border-radius:2px;
+        }
+        button {
+            width: 200px;
+            padding:8px;
+            background-color: #0f217f;
+            border-color: #180b89;
+            color: #fff;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            border-radius: 10px; /* future proofing */
+            -khtml-border-radius: 10px; /* for old Konqueror browsers */
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid transparent;
+            font-weight: 900;
+            font-size:125%
+        }
+    </style>
+</head>
+<body>
+<div class="zhezhao" id='zhezhao'>
+    <div class="tankuang">
+        <div id="header">
+            <br><br>
+            <div style="margin-left: 20px">
+                <h3>请选择获取BGM方式：</h3>
+                <div id="radio">
+                    <input type="radio" name="bgm" id="my" value="my" checked>
+                    <label for="my" style="cursor:pointer">从我的作品库获取</label>
+                    <input type="radio" name="bgm" id="others" value="others">
+                    <label for="others" style="cursor:pointer">从我的音乐库获取</label>
+                </div>
+            </div>
+            <br><br>
+            <div style="margin-left: 20px">
+                <h3>请选择BGM：</h3>
+                <select id="bgm_list"><option value="a_id">-----请选择BGM-----</option></select>
+            </div>
+            <br><br><br><br><br><br>
+            <div style="text-align: center">
+                <button onclick="submit()">确定</button>
+            </div>
+            <div id="header-right" onclick="hidder()">x</div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    document.getElementById("radio").addEventListener("click",function(e) {
+        if(e.target.tagName==="INPUT"){
+            console.log("value",e.target.value)
+            if(e.target.value === 'my') {
+                localStorage.setItem('bgm_type', '1')
+                my_bgm()
+            }
+            else {
+                localStorage.setItem('bgm_type', '0')
+                others_bgm()
+            }
+        }
+    })
+    function hidder() {
+        history.back(-1);
+    }
+    function submit() {
+        let my_select = document.getElementById("bgm_list")
+        let index = my_select.selectedIndex
+        localStorage.setItem('bgm_value', my_select.options[index].value)
+        history.back(-1);
+    }
+    function my_bgm() {
+        document.getElementById("bgm_list").innerHTML = "<select id=\"bgm_list\"><option value=\"a_id\">-----请选择BGM-----</option></select>"
+        let xhr = new XMLHttpRequest();
+        let userId= '1001';
+        let url = "http://localhost:8089/audio/find/all/upload/pmp3";
+        xhr.open("GET",url+'?userId='+userId,true);
+        xhr.responseType = 'json';
+        xhr.onload = function(e) {
+            if (this.status === 200) {
+                console.log('response', this.response); // JSON response
+                for (let i = 0; i < this.response.length; i++) {
+                    document.getElementById("bgm_list").innerHTML += "<option value=" + this.response[i].audio_id + ">" + this.response[i].audio_name + "</option>"
+                }
+            }
+            else {
+                alert("请求错误！！！")
+            }
+        };
+        xhr.send();
+    }
+    function others_bgm() {
+        document.getElementById("bgm_list").innerHTML = "<select id=\"bgm_list\"><option value=\"a_id\">-----请选择BGM-----</option></select>"
+        let xhr = new XMLHttpRequest();
+        let userId= '1001';
+        let url = "http://localhost:8089/audio/find/all/upload/mp3";
+        xhr.open("GET",url+'?userId='+userId,true);
+        xhr.responseType = 'json';
+        xhr.onload = function(e) {
+            if (this.status === 200) {
+                console.log('response', this.response); // JSON response
+                for (let i = 0; i < this.response.length; i++) {
+                    document.getElementById("bgm_list").innerHTML += "<option value=" + this.response[i].audio_id + ">" + this.response[i].audio_name + "</option>"
+                }
+            }
+            else {
+                alert("请求错误！！！")
+            }
+        };
+        xhr.send();
+    }
+</script>
+</body>
+</html>
+
